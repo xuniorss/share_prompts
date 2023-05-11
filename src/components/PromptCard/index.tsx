@@ -73,7 +73,8 @@ export const PromptCard = ({
             className="font-inter text-sm blue_gradient cursor-pointer"
             onClick={() => handleTagClick && handleTagClick(post.tag)}
          >
-            {post.tag}
+            {post.tag.startsWith('#') && post.tag}
+            {!post.tag.startsWith('#') && `#${post.tag}`}
          </p>
 
          {session &&

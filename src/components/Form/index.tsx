@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Dispatch, FormEventHandler, SetStateAction } from 'react'
 
 type FormProps = {
-   type: 'Criar'
+   type: 'Criar' | 'Editar'
    post: PostProps
    setPost: Dispatch<SetStateAction<PostProps>>
    submitting: boolean
