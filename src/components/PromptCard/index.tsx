@@ -1,14 +1,16 @@
 'use client'
 
 import { PromptRequestProps } from '@app/api/prompt/route'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { useCallback, useState } from 'react'
 
 type PromptCardProps = {
    post: PromptRequestProps
-   handleTagClick: (tag: string) => void
-   handleEdit?: () => void
-   handleDelete?: () => void
+   handleTagClick?: (tag: string) => void
+   handleEdit?: (post: PromptRequestProps) => void
+   handleDelete?: (post: PromptRequestProps) => void
 }
 
 export const PromptCard = ({
@@ -18,6 +20,9 @@ export const PromptCard = ({
    handleDelete,
 }: PromptCardProps) => {
    const [copied, setCopied] = useState('')
+
+   const { data: session } = useSession()
+   const path = usePathname()
 
    const handleCopy = useCallback(() => {
       setCopied(post.prompt)
@@ -70,6 +75,26 @@ export const PromptCard = ({
          >
             {post.tag}
          </p>
+
+         {session &&
+            session.user.id === post.creator._id &&
+            path === '/profile' && (
+               <div className="mt-5 flex-center gap-4 border-t border-gray-100 pt-3">
+                  <p
+                     className="font-inter text-sm green_gradient cursor-pointer"
+                     onClick={() => handleEdit && handleEdit(post)}
+                  >
+                     Editar
+                  </p>
+
+                  <p
+                     className="font-inter text-sm orange_gradient cursor-pointer"
+                     onClick={() => handleDelete && handleDelete(post)}
+                  >
+                     Deletar
+                  </p>
+               </div>
+            )}
       </div>
    )
 }
